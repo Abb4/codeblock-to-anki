@@ -1,5 +1,5 @@
 from parsed_codeblock import ParsedCodeBlock
-from parser import CodeblockParser
+from codeblock_parser import CodeblockParser
 
 def test_parsing_of_one_codeblock():
     parser = CodeblockParser()

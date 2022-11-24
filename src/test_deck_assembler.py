@@ -1,5 +1,5 @@
 from deck_assembler import DeckAssembler, quick_hash
-from parser import CodeblockParser
+from codeblock_parser import CodeblockParser
 
 # FIXME currently assemble_deck_from_codeblocks writes to disk which is bad for testing, split the method and rewrite the test
 def skipped_test_deck_creation():

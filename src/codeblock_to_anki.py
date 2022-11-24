@@ -2,7 +2,7 @@ from pathlib import Path
 
 from deck_assembler import DeckAssembler
 from parsed_codeblock import ParsedCodeBlock
-from parser import CodeblockParser
+from codeblock_parser import CodeblockParser
 
 
 def main():
