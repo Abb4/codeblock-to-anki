@@ -1,17 +1,26 @@
-# codeblock-to-anki
-Parses markdown code blocks and assembles them into an anki package using [genanki](https://github.com/kerrickstaley/genanki).
+# markdown-to-anki
+Parses markdown elements into cloze anki notes and assembles them into an anki package using [genanki](https://github.com/kerrickstaley/genanki).
 
 ## Usage
-Create some anki code blocks in your markdown files with unique `name` and `deck` (note the `anki` attribute):
+This script han handle codeblocks or [obsidian callouts](https://help.obsidian.md/How+to/Use+callouts).
 
-~~~
+Create some anki code blocks or callouts in your markdown files with unique `name` and `deck` (note the `anki` attribute in codeblock):
+
+~~~markdown
 ```anki name:strings deck:programming_fundamentals
 	{{c1::Strings}} are sequences of {{c2::characters}}.
 ```
+
+Some text..
+
+> [!summary]+ name:obsidian deck:general
+> Use {{c1:obsidian}} to record notes
+>
+> Because its convenient.
 ~~~
 
-Run `python path/to/src/codeblock_to_anki.py` in the directory where you notes lie. All notes in the directory and child directories will be assembled into anki cloze notes and written into a package.
+Run `python path/to/src/markdown_to_anki.py` in the directory where you notes lie. All notes in the directory and child directories will be assembled into anki cloze notes and written into a package.
 
 Import the package into anki.
 
-Contributions are very welcome.
+If you want other markdown elements to be handled, feel free to submit an issue.
