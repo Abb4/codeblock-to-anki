@@ -1,66 +1,149 @@
-from pathlib import Path
 import genanki
 from callout_parser import CalloutParser
 from deck_assembler import DeckAssembler, quick_hash
 from codeblock_parser import CodeblockParser
+from utils import slpit_lines_using_anki_separator
 
-# FIXME currently assemble_deck_from_codeblocks writes to disk which is bad for testing, split the method and rewrite the test
-def skipped_test_deck_creation():
+def test_deck_creation():
     assembler = DeckAssembler()
     
     parser = CodeblockParser()
    
-    content = '''
-    ```anki name:test_note deck:test_deck
-        {{c1::Cloze1}} before {{c2::cloze2}}.
-        some more code
-    ```
-    
-    ```anki name:test_note deck:test_deck2
-        {{c1::Cloze1}} before {{c2::cloze2}}.
-        some more code
-    ```
-    
-    ```anki name:test_note2 deck:test_deck
-        {{c1::Cloze1}} before {{c2::cloze2}}.
-        some more code
-    ```
+    content = '''```anki name:note1 deck:deck1
+Contents Contents
+Contents
+```
+some irrelevant text
+> some irrelevant quote
+```cpp
+some irrelevant code
+```
 
-    '''
+```anki name:note2 deck:deck1
+    Contents2 Contents2
+    Contents2
+    Contents2 Contents2 Contents2
+```
+
+some irrelevant text
+> some irrelevant quote
+some irrelevant text
+
+```cpp
+some irrelevant code
+```
+
+```anki name:note3 deck:deck2
+Contents3 Contents3
+Contents3 Contents3 Contents3
+```
+'''
     
     codeblocks = parser.parse_text(content, None)
+
+    decks: dict[str, genanki.Deck] = {}    
     
-    assembler.assemble_deck_from_codeblocks(codeblocks, None)
+    assembler.add_notes_from_codeblocks(codeblocks, decks)
+    
+    assert len(decks.keys()) == 2
+    
+    deck1 = decks["deck1"]
+    deck2 = decks["deck2"]
+    
+    assert deck1 is not None
+    assert deck2 is not None
+    
+    assert len(deck1.notes) == 2
+    assert len(deck2.notes) == 1
+   
+    note1: genanki.Note = deck1.notes[0] 
+    note2: genanki.Note = deck1.notes[1] 
+    note3: genanki.Note = deck2.notes[0] 
+    
+    note1_content = slpit_lines_using_anki_separator(note1.fields[0])
+    note2_content = slpit_lines_using_anki_separator(note2.fields[0])
+    note3_content = slpit_lines_using_anki_separator(note3.fields[0])
 
+    assert len(note1_content) == 2
+    assert len(note2_content) == 3
+    assert len(note3_content) == 2
+    
+    assert note1_content[0].strip() == "Contents Contents"
+    assert note1_content[1].strip() == "Contents"
+    
+    assert note2_content[0].strip() == "Contents2 Contents2"
+    assert note2_content[1].strip() == "Contents2"
+    assert note2_content[2].strip() == "Contents2 Contents2 Contents2"
 
-# FIXME currently assemble_deck_from_codeblocks writes to disk which is bad for testing, split the method and rewrite the test
-def skipped_test_deck_creation_from_callouts():
+    assert note3_content[0].strip() == "Contents3 Contents3"
+    assert note3_content[1].strip() == "Contents3 Contents3 Contents3"
+
+def test_deck_creation_from_callouts_by_deck_name():
     assembler = DeckAssembler()
     
     parser = CalloutParser()
    
     content = '''
-> [!summary]+ name:strings2 deck:programming_fundamentals2
-> {{c1::Strings}} are {{c2::Nice}}
+> [!summary]+ name:note1 deck:deck1
+> Contents Contents
+> Contents
+some irrelevant text
+> some irrelevant quote
+some irrelevant text
+
+> [!summary]+ name:note2 deck:deck1
+> Contents2 Contents2
+> Contents2
+> Contents2 Contents2 Contents2
+
+some irrelevant text
+> some irrelevant quote
+some irrelevant text
+
+> [!summary]+ name:note3 deck:deck2
+> Contents3 Contents3
+> Contents3 Contents3 Contents3
 '''
     
     callouts = parser.parse_text(content, None)
 
-    decks = {}    
+    decks: dict[str, genanki.Deck] = {}    
     
     assembler.add_notes_from_callouts(callouts, decks)
     
-    package_name = "deck_package2.apkg" 
+    assert len(decks.keys()) == 2
     
-    output = Path(".")
-     
-    package_path = output / package_name 
-        
-    genanki.Package(decks.values()).write_to_file(package_path.absolute())
+    deck1 = decks["deck1"]
+    deck2 = decks["deck2"]
     
-    print(f"Created {package_path.absolute()}")
+    assert deck1 is not None
+    assert deck2 is not None
     
-    assert False
+    assert len(deck1.notes) == 2
+    assert len(deck2.notes) == 1
+   
+    note1: genanki.Note = deck1.notes[0] 
+    note2: genanki.Note = deck1.notes[1] 
+    note3: genanki.Note = deck2.notes[0] 
+    
+    note1_content = slpit_lines_using_anki_separator(note1.fields[0])
+    note2_content = slpit_lines_using_anki_separator(note2.fields[0])
+    note3_content = slpit_lines_using_anki_separator(note3.fields[0])
+
+    assert len(note1_content) == 2
+    assert len(note2_content) == 3
+    assert len(note3_content) == 2
+    
+    assert note1_content[0].strip() == "Contents Contents"
+    assert note1_content[1].strip() == "Contents"
+    
+    assert note2_content[0].strip() == "Contents2 Contents2"
+    assert note2_content[1].strip() == "Contents2"
+    assert note2_content[2].strip() == "Contents2 Contents2 Contents2"
+
+    assert note3_content[0].strip() == "Contents3 Contents3"
+    assert note3_content[1].strip() == "Contents3 Contents3 Contents3"
+
 
 def test_quick_hash():
     note1_name = "My Note"

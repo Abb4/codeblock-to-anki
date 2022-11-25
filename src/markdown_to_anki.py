@@ -37,10 +37,6 @@ def main():
                 callout_parser.parse_text(contents, path=file) 
             )
             
-    print(f"Found total {len(codeblocks)} codeblocks")
-    
-    codeblocks = list(filter(lambda c: c.type == "anki", codeblocks)) 
-    
     print(f"Found 'anki' {len(codeblocks)} codeblocks")
 
     print(f"Found {len(callouts)} callouts")

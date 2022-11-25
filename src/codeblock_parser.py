@@ -18,6 +18,9 @@ class CodeblockParser:
                     type = self.parse_codeblock_type(line)
                     headers = self.parse_codeblock_headers(line)
                     
+                    if type.lower() != "anki":
+                        continue
+                    
                     current_codeblock.begin(line_number + 1, path, type, headers)
                 else:
                     content = text.splitlines()[current_codeblock.start_pos:line_number]

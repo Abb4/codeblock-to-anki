@@ -1,5 +1,4 @@
 import hashlib
-from pathlib import Path
 import genanki
 from parsed_callout import ParsedCallout
 from parsed_codeblock import ParsedCodeBlock
@@ -14,8 +13,8 @@ class DeckAssembler:
         
             note_deck_name = self.get_attribute_from_codeblock_headers(codeblock.headers, "deck")
             
-            assert note_name is not None
-            assert note_deck_name is not None
+            if note_name is None or note_deck_name is None:
+                continue
             
             # TODO document on github how note ids are generated from names
             note = genanki.Note(
