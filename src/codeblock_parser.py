@@ -1,14 +1,14 @@
 from pathlib import Path
 from parsed_codeblock import ParsedCodeBlock
 
+from utils import anki_newline_separator
+
 class CodeblockParser:
     def parse_text(self, text: str, path: Path) -> list:
         parsed_codeblocks = []
         current_codeblock: ParsedCodeBlock = None
         
-        for (line_number, line_raw) in enumerate(text.splitlines()):
-            line = line_raw
-            
+        for (line_number, line) in enumerate(text.splitlines()):
             if self.has_codeblock_separator(line):
                 if current_codeblock == None or current_codeblock.is_completed():
                     current_codeblock = ParsedCodeBlock()
@@ -16,10 +16,13 @@ class CodeblockParser:
                     type = self.parse_codeblock_type(line)
                     headers = self.parse_codeblock_headers(line)
                     
+                    if type.lower() != "anki":
+                        continue
+                    
                     current_codeblock.begin(line_number + 1, path, type, headers)
                 else:
                     content = text.splitlines()[current_codeblock.start_pos:line_number]
-                    content = "\n".join(content)
+                    content = anki_newline_separator.join(content)
                     
                     current_codeblock.complete(
                         content=content,
@@ -44,9 +47,6 @@ class CodeblockParser:
         tail = header_line.lstrip()[3:]
         if len(tail) > 0:
             headers = tail.split(' ')
-            
-            for header in headers:
-                header = header.strip()
             
             return headers[1:]
         
