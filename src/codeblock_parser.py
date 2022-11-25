@@ -50,9 +50,6 @@ class CodeblockParser:
         if len(tail) > 0:
             headers = tail.split(' ')
             
-            for header in headers:
-                header = header.strip()
-            
             return headers[1:]
         
         return []
