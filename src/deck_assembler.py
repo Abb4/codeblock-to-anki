@@ -7,10 +7,7 @@ class DeckAssembler:
     def __init__(self):
         pass
     
-    def assemble_deck_from_codeblocks(self, codeblocks: list[ParsedCodeBlock], output_path: Path):
-        
-        decks = {}
-        
+    def add_notes_from_codeblocks(self, codeblocks: list[ParsedCodeBlock], decks: dict):
         for codeblock in codeblocks:
             note_name = self.get_attribute_from_codeblock_headers(codeblock.headers, "name")
         
@@ -39,15 +36,7 @@ class DeckAssembler:
                 
                 print(f"Added {note_name} to deck {note_deck_name}")
                 
-                decks[note_deck_name] = deck
-        
-        package_name = "deck_package.apkg" 
-        
-        package_path = output_path / package_name 
-         
-        genanki.Package(decks.values()).write_to_file(package_path.absolute())
-        
-        print(f"Created {package_path.absolute()}")
+                decks[note_deck_name] = deck 
    
     def get_attribute_from_codeblock_headers(self, headers: list[str], header_name: str):
         for header in headers:
