@@ -2,7 +2,7 @@ import genanki
 from callout_parser import CalloutParser
 from deck_assembler import DeckAssembler, quick_hash
 from codeblock_parser import CodeblockParser
-from utils import slpit_lines_using_anki_separator
+from utils import split_lines_using_anki_separator
 
 def test_deck_creation():
     assembler = DeckAssembler()
@@ -60,9 +60,9 @@ Contents3 Contents3 Contents3
     note2: genanki.Note = deck1.notes[1] 
     note3: genanki.Note = deck2.notes[0] 
     
-    note1_content = slpit_lines_using_anki_separator(note1.fields[0])
-    note2_content = slpit_lines_using_anki_separator(note2.fields[0])
-    note3_content = slpit_lines_using_anki_separator(note3.fields[0])
+    note1_content = split_lines_using_anki_separator(note1.fields[0])
+    note2_content = split_lines_using_anki_separator(note2.fields[0])
+    note3_content = split_lines_using_anki_separator(note3.fields[0])
 
     assert len(note1_content) == 2
     assert len(note2_content) == 3
@@ -126,9 +126,9 @@ some irrelevant text
     note2: genanki.Note = deck1.notes[1] 
     note3: genanki.Note = deck2.notes[0] 
     
-    note1_content = slpit_lines_using_anki_separator(note1.fields[0])
-    note2_content = slpit_lines_using_anki_separator(note2.fields[0])
-    note3_content = slpit_lines_using_anki_separator(note3.fields[0])
+    note1_content = split_lines_using_anki_separator(note1.fields[0])
+    note2_content = split_lines_using_anki_separator(note2.fields[0])
+    note3_content = split_lines_using_anki_separator(note3.fields[0])
 
     assert len(note1_content) == 2
     assert len(note2_content) == 3

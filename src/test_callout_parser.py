@@ -1,7 +1,7 @@
 from callout_parser import CalloutParser
 from parsed_callout import ParsedCallout
 
-from utils import slpit_lines_using_anki_separator
+from utils import split_lines_using_anki_separator
 
 def test_parsing_of_one_callout():
     parser = CalloutParser()
@@ -26,7 +26,7 @@ some irrelevant text
    
     assert callout1.type == "NOTE"
      
-    callout1_content = slpit_lines_using_anki_separator(callout1.content)
+    callout1_content = split_lines_using_anki_separator(callout1.content)
     
     assert len(callout1_content) == 2
     
@@ -73,8 +73,8 @@ some irrelevant text
     assert callout1.type == "NOTE"
     assert callout2.type == "WARNING"
     
-    callout1_content = slpit_lines_using_anki_separator(callout1.content)
-    callout2_content = slpit_lines_using_anki_separator(callout2.content)
+    callout1_content = split_lines_using_anki_separator(callout1.content)
+    callout2_content = split_lines_using_anki_separator(callout2.content)
     
     assert len(callout1_content) == 2
     
@@ -121,7 +121,7 @@ def test_parsing_of_one_callout2():
    
     assert callout1.type == "summary"
      
-    callout1_content = slpit_lines_using_anki_separator(callout1.content)
+    callout1_content = split_lines_using_anki_separator(callout1.content)
     
     assert len(callout1_content) == 2
     
