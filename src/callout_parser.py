@@ -10,9 +10,7 @@ class CalloutParser:
         
         lines = text.splitlines()
         
-        for (line_number, line_raw) in enumerate(lines):
-            line = line_raw
-            
+        for (line_number, line) in enumerate(lines):
             if not line.startswith(r">"):
                 if current_callout is not None and current_callout.completed is False:
                     content = lines[current_callout.start_pos:line_number]

@@ -8,9 +8,7 @@ class CodeblockParser:
         parsed_codeblocks = []
         current_codeblock: ParsedCodeBlock = None
         
-        for (line_number, line_raw) in enumerate(text.splitlines()):
-            line = line_raw
-            
+        for (line_number, line) in enumerate(text.splitlines()):
             if self.has_codeblock_separator(line):
                 if current_codeblock == None or current_codeblock.is_completed():
                     current_codeblock = ParsedCodeBlock()
