@@ -1,6 +1,8 @@
 from pathlib import Path
 from parsed_codeblock import ParsedCodeBlock
 
+from utils import anki_newline_separator
+
 class CodeblockParser:
     def parse_text(self, text: str, path: Path) -> list:
         parsed_codeblocks = []
@@ -19,7 +21,7 @@ class CodeblockParser:
                     current_codeblock.begin(line_number + 1, path, type, headers)
                 else:
                     content = text.splitlines()[current_codeblock.start_pos:line_number]
-                    content = "\n".join(content)
+                    content = anki_newline_separator.join(content)
                     
                     current_codeblock.complete(
                         content=content,

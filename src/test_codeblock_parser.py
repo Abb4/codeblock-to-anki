@@ -1,6 +1,8 @@
 from parsed_codeblock import ParsedCodeBlock
 from codeblock_parser import CodeblockParser
 
+from utils import slpit_lines_using_anki_separator
+
 def test_parsing_of_one_codeblock():
     parser = CodeblockParser()
    
@@ -19,7 +21,7 @@ def test_parsing_of_one_codeblock():
     
     assert codeblock.type == "anki"
     
-    codeblock_content = codeblock.content.splitlines() 
+    codeblock_content = slpit_lines_using_anki_separator(codeblock.content)
     
     assert len(codeblock_content) == 2
     assert codeblock_content[0].strip() == "some code"
@@ -88,9 +90,9 @@ def test_parsing_of_multiple_codeblocks():
     assert codeblock2.type == "anki"
     assert codeblock3.type == "anki"
     
-    codeblock1_content = codeblock1.content.splitlines() 
-    codeblock2_content = codeblock2.content.splitlines() 
-    codeblock3_content = codeblock3.content.splitlines() 
+    codeblock1_content = slpit_lines_using_anki_separator(codeblock1.content)
+    codeblock2_content = slpit_lines_using_anki_separator(codeblock2.content)
+    codeblock3_content = slpit_lines_using_anki_separator(codeblock3.content)
 
     assert len(codeblock1_content) == 2
     assert codeblock1_content[0].strip() == "some code"

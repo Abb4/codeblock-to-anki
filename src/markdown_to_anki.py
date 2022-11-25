@@ -1,8 +1,10 @@
 from pathlib import Path
 
 import genanki
+from callout_parser import CalloutParser
 
 from deck_assembler import DeckAssembler
+from parsed_callout import ParsedCallout
 from parsed_codeblock import ParsedCodeBlock
 from codeblock_parser import CodeblockParser
 
@@ -12,9 +14,11 @@ def main():
     output = Path(".")
     
     assembler = DeckAssembler()
-    parser = CodeblockParser()
+    codeblock_parser = CodeblockParser()
+    callout_parser = CalloutParser()
     
-    codeblocks: ParsedCodeBlock = []
+    codeblocks: list[ParsedCodeBlock] = []
+    callouts: list[ParsedCallout] = []
     
     files = list(input.glob("./**/*.md"))
      
@@ -22,8 +26,15 @@ def main():
     
     for file in files:
         with file.open("r") as f:
+            
+            contents = f.read()
+            
             codeblocks.extend(
-                parser.parse_text(f.read(), path=file) 
+                codeblock_parser.parse_text(contents, path=file) 
+            )
+            
+            callouts.extend(
+                callout_parser.parse_text(contents, path=file) 
             )
             
     print(f"Found total {len(codeblocks)} codeblocks")
@@ -31,11 +42,14 @@ def main():
     codeblocks = list(filter(lambda c: c.type == "anki", codeblocks)) 
     
     print(f"Found 'anki' {len(codeblocks)} codeblocks")
+
+    print(f"Found {len(callouts)} callouts")
+   
+    decks = {}    
     
-    assembler.assemble_deck_from_codeblocks(codeblocks, output)
-    
-    decks = {}
-    
+    assembler.add_notes_from_codeblocks(codeblocks, decks)
+    assembler.add_notes_from_callouts(callouts, decks)
+         
     package_name = "deck_package.apkg" 
     
     package_path = output / package_name 
