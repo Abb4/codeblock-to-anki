@@ -2,7 +2,7 @@
 Parses markdown elements into cloze anki notes and assembles them into an anki package using [genanki](https://github.com/kerrickstaley/genanki).
 
 ## Usage
-This script han handle codeblocks or [obsidian callouts](https://help.obsidian.md/How+to/Use+callouts).
+This script can handle codeblocks or [obsidian callouts](https://help.obsidian.md/How+to/Use+callouts).
 
 Create some anki code blocks or callouts in your markdown files with unique `name` and `deck` (note the `anki` attribute in codeblock):
 
