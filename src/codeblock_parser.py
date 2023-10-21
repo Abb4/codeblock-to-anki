@@ -11,14 +11,14 @@ class CodeblockParser:
         for (line_number, line) in enumerate(text.splitlines()):
             if self.has_codeblock_separator(line):
                 if current_codeblock == None or current_codeblock.is_completed():
-                    current_codeblock = ParsedCodeBlock()
-                    
                     type = self.parse_codeblock_type(line)
                     headers = self.parse_codeblock_headers(line)
                     
                     if type is None or type.lower() != "anki":
                         continue
                     
+                    current_codeblock = ParsedCodeBlock()
+
                     current_codeblock.begin(line_number + 1, path, type, headers)
                 else:
                     content = text.splitlines()[current_codeblock.start_pos:line_number]
