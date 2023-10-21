@@ -11,6 +11,14 @@ Create some anki code blocks or callouts in your markdown files with unique `nam
 	{{c1::Strings}} are sequences of {{c2::characters}}.
 ```
 
+or using markdown codeblock:
+
+```markdown anki name:strings deck:programming_fundamentals
+	{{c1::Strings}} are sequences of {{c2::characters}}.
+```
+
+Note the `anki` attribute in the header of the codeblock. It is required.
+
 Some text..
 
 > [!summary]+ name:obsidian deck:general
