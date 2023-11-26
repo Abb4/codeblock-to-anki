@@ -59,6 +59,10 @@ def main():
 
     print(f"Found {len(callouts)} callouts")
 
+    if(len(codeblocks) + len(callouts) == 0):
+        print("Found no notes or callouts to create a deck with. Aborting.")
+        return
+
     decks = {}
 
     assembler.add_notes_from_codeblocks(codeblocks, decks)
