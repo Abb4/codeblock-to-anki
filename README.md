@@ -27,8 +27,8 @@ Some text..
 > Because its convenient.
 ~~~
 
-Run `python path/to/src/markdown_to_anki.py` in the directory where you notes lie. All notes in the directory and child directories will be assembled into anki cloze notes and written into a package.
+Run `python markdown_to_anki.py --help` to see usage instructions and defaults. Specify input and output dirs as follows: `python markdown_to_anki.py --input_dir /path/to/input --output_dir /path/to/output`.
 
-Import the package into anki.
+Then import the package into anki.
 
-If you want other markdown elements to be handled, feel free to submit an issue.
+If you want other markdown elements to be handled, feel free to submit an issue or open a discussion.
