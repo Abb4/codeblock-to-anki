@@ -3,8 +3,10 @@ from parsed_codeblock import ParsedCodeBlock
 
 from utils import anki_newline_separator
 
+from typing import List
+
 class CodeblockParser:
-    def parse_text(self, text: str, path: Path) -> list:
+    def parse_text(self, text: str, path: Path) -> List:
         parsed_codeblocks = []
         current_codeblock: ParsedCodeBlock = None
 
@@ -33,7 +35,7 @@ class CodeblockParser:
 
         return parsed_codeblocks
 
-    def has_needed_headers(self, type: str, headers: list[str]) -> bool:
+    def has_needed_headers(self, type: str, headers: List[str]) -> bool:
         if type == "anki":
             return True
 
@@ -52,7 +54,7 @@ class CodeblockParser:
 
         return None
 
-    def parse_codeblock_headers(self, header_line: str) -> list[str]:
+    def parse_codeblock_headers(self, header_line: str) -> List[str]:
         tail = header_line.lstrip()[3:]
         if len(tail) > 0:
             headers = tail.split(' ')

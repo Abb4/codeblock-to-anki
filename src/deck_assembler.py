@@ -3,26 +3,28 @@ import genanki
 from parsed_callout import ParsedCallout
 from parsed_codeblock import ParsedCodeBlock
 
+from typing import List
+
 class DeckAssembler:
     def __init__(self):
         pass
-    
-    def add_notes_from_codeblocks(self, codeblocks: list[ParsedCodeBlock], decks: dict):
+
+    def add_notes_from_codeblocks(self, codeblocks: List[ParsedCodeBlock], decks: dict):
         for codeblock in codeblocks:
             note_name = self.get_attribute_from_codeblock_headers(codeblock.headers, "name")
-        
+
             note_deck_name = self.get_attribute_from_codeblock_headers(codeblock.headers, "deck")
-            
+
             if note_name is None or note_deck_name is None:
                 continue
-            
+
             # TODO document on github how note ids are generated from names
             note = genanki.Note(
                 guid=quick_hash(note_name + "_" + note_deck_name),
                 model=genanki.CLOZE_MODEL,
                 fields=[codeblock.content, '']
             )
-           
+
             if note_deck_name in decks:
                 decks[note_deck_name].add_note(note)
             else:
@@ -33,28 +35,28 @@ class DeckAssembler:
                 )
 
                 deck.add_note(note)
-                
-                print(f"Added {note_name} from codeblock to deck {note_deck_name}")
-                
-                decks[note_deck_name] = deck 
-        
 
-    def add_notes_from_callouts(self, callouts: list[ParsedCallout], decks: dict):
+                print(f"Added {note_name} from codeblock to deck {note_deck_name}")
+
+                decks[note_deck_name] = deck
+
+
+    def add_notes_from_callouts(self, callouts: List[ParsedCallout], decks: dict):
         for callout in callouts:
             note_name = self.get_attribute_value_by_name(callout.attributes, "name")
-            
+
             note_deck_name = self.get_attribute_value_by_name(callout.attributes, "deck")
-            
+
             if note_name == None or note_deck_name == None:
                 continue
-           
+
             # TODO document on github how note ids are generated from names
             note = genanki.Note(
                 guid=quick_hash(note_name + "_" + note_deck_name),
                 model=genanki.CLOZE_MODEL,
                 fields=[callout.content, '']
             )
-           
+
             if note_deck_name in decks:
                 decks[note_deck_name].add_note(note)
             else:
@@ -65,37 +67,37 @@ class DeckAssembler:
                 )
 
                 deck.add_note(note)
-                
-                print(f"Added {note_name} from callout to deck {note_deck_name}")
-                
-                decks[note_deck_name] = deck 
 
-    def get_attribute_value_by_name(self, attributes: list[str], attribute_name: str):
+                print(f"Added {note_name} from callout to deck {note_deck_name}")
+
+                decks[note_deck_name] = deck
+
+    def get_attribute_value_by_name(self, attributes: List[str], attribute_name: str):
         for attribute in attributes:
             parts = attribute.split(":")
             key = parts[0]
-            
+
             if key == attribute_name:
                 if len(parts) > 1:
                     value = parts[1]
                     return value
                 else:
                     return None
-        
+
         return None
-   
-    def get_attribute_from_codeblock_headers(self, headers: list[str], header_name: str):
+
+    def get_attribute_from_codeblock_headers(self, headers: List[str], header_name: str):
         for header in headers:
             parts = header.split(":")
             key = parts[0]
-            
+
             if key == header_name:
                 if len(parts) > 1:
                     value = parts[1]
                     return value
                 else:
                     return None
-        
+
         return None
 
 def quick_hash(str: str) -> int:
