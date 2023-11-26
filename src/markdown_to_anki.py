@@ -9,6 +9,8 @@ from parsed_callout import ParsedCallout
 from parsed_codeblock import ParsedCodeBlock
 from codeblock_parser import CodeblockParser
 
+from typing import List
+
 DEFAULT_PACKAGE_NAME = "deck_package.apkg"
 
 def main():
@@ -35,8 +37,8 @@ def main():
     codeblock_parser = CodeblockParser()
     callout_parser = CalloutParser()
 
-    codeblocks: list[ParsedCodeBlock] = []
-    callouts: list[ParsedCallout] = []
+    codeblocks: List[ParsedCodeBlock] = []
+    callouts: List[ParsedCallout] = []
 
     files = list(input_dir.glob("./**/*.md"))
 
