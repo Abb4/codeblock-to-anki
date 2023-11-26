@@ -18,12 +18,14 @@ def main():
     parser.add_argument('--input_dir', type=str, help='Input directory of the markdown files to parse. If none provided, defaults to current directory.')
     parser.add_argument('--output_dir', type=str, help='Output directory of the resulting anki package. If none provided, defaults to input_dir.')
     parser.add_argument('--package_name', type=str, default=DEFAULT_PACKAGE_NAME, help=f'The name of the resulting package (default: {DEFAULT_PACKAGE_NAME})')
+    parser.add_argument('--dont_align_content_left', action='store_true', help='By default the content of the notes should be aligned left. Toggle this to disable this behavior')
 
     args = parser.parse_args()
 
     input_dir = Path(args.input_dir) if args.input_dir else Path(".")
     output_dir = Path(args.output_dir) if args.output_dir else Path(input_dir)
     package_name = args.package_name
+    should_align_content_left = not args.dont_align_content_left
 
     package_path = output_dir / package_name
 
@@ -65,6 +67,10 @@ def main():
         print("Found no notes or callouts to create a deck with. Aborting.")
         return
 
+    if(should_align_content_left):
+        codeblocks = [align_content_left(codeblock) for codeblock in codeblocks]
+        callouts = [align_content_left(callout) for callout in callouts]
+
     decks = {}
 
     assembler.add_notes_from_codeblocks(codeblocks, decks)
@@ -73,6 +79,12 @@ def main():
     genanki.Package(decks.values()).write_to_file(package_path.absolute())
 
     print(f"Created {package_path.absolute()}")
+
+
+def align_content_left(codeblock: ParsedCodeBlock) -> ParsedCodeBlock:
+    codeblock.content = '<div style="text-align: left;">' + codeblock.content + '</div>'
+
+    return codeblock
 
 if __name__=="__main__":
     main()
